@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Person</title>
+    <link rel="stylesheet" href="components/bootstrap.min.css">
+    <link rel="stylesheet" href="components/style.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Person List</h1>
+
+        <input class="btn btn-primary" type="button" id="btnAdd" value="Add" data-toggle="modal" data-target="#addModal">
+
+        <div class="modal" id="addModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Create</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="tab tab-2">
+                            FirstName:<input type="text" name="fname" id="fname">
+                            <br>
+                            <br>
+                            MidleName :<input type="text" name="sname" id="sname">
+                            <br>
+                            <br>
+                            Lastname:<input type="text" name="lname" id="lname">
+                            <br>
+                            <br>
+                            City:<input type="text" name="city" id="city">
+                            <br>
+                            <br>
+                            Age:<input type="number" name="age" id="age">
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="addSampleRow('tableSt');">Create</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <input class="btn btn-danger" type="button" id="btnDelete" value="Delete" data-toggle="modal" data-target="#delModal">
+
+        <div class="modal" id="delModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="tab tab-2">
+                            <h2>Are you sure you want to delete the entry?</h2>
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="removeSampleRow('tableSt')">Delete</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <input id="myInput" type="text" placeholder=" search..">
+        <br>
+        <br>
+        <div class="form-group">
+            <select name="state" id="maxRows" class="form-control" style="width: 170px;">
+                <option value="500">Show all</option>
+                <option value="10">10</option> 
+                <option value="10">15</option>               
+                <option value="25">25</option>                
+                <option value="50">50</option>
+            </select>
+        </div>
+        <br>
+        <br>
+
+        <table id="myTable" class="table table-striped table-bordered table-hover ">
+            <tr>
+                <th></th>
+                <th class="text-center" onclick="sortTable(1)">FirstName<i class="fa fa-fw fa-sort" id="sort"></i></th>
+                <th class="text-center" onclick="sortTable(2)">MidleName<i class="fa fa-fw fa-sort"></i></th>
+                <th class="text-center" onclick="sortTable(3)">LastName<i class="fa fa-fw fa-sort"></i></th>
+                <th class="text-center" onclick="sortTable(4)">City<i class="fa fa-fw fa-sort"></i></th>
+                <th class="text-center" onclick="sortTable(5)">Age <i class="fa fa-fw fa-sort"></i></th>
+            </tr>
+            <tbody id="tableSt">
+            	<tr><td><input type="checkbox"></td><td>Zorin</td><td>Andriy</td><td>Andreevich</td><td>Vinnytsia</td><td>20</td></tr>
+            	<tr><td><input type="checkbox"></td><td>Zorin</td><td>Leonardo</td><td>da</td><td>Florencia</td><td>33</td></tr>
+            	<tr><td><input type="checkbox"></td><td>QWER</td><td>fDF</td><td>ase</td><td>Berlin</td><td>56</td></tr>
+            	<tr><td><input type="checkbox"></td><td>gsdgs</td><td>sdfcx</td><td>sdgs</td><td>Paris</td><td>50</td></tr>
+            	<tr><td><input type="checkbox"></td><td>Vovk</td><td>gsg</td><td>sbsdfsd</td><td>Kiev</td><td>32</td></tr>
+            	<tr><td><input type="checkbox"></td><td>sfdsf</td><td>cvbcvb</td><td>mnbnb</td><td>Moscow</td><td>26</td></tr>
+            	<tr><td><input type="checkbox"></td><td>cvbcvb</td><td>cvbdg</td><td>xcvxcvxcv</td><td>Lviv</td><td>20</td></tr>
+            	<tr><td><input type="checkbox"></td><td>vbnvbn</td><td>xcvxcvv</td><td>cvb</td><td>Donetsk</td><td>77</td></tr>
+            </tbody>
+        </table>
+
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </div>
+    <script src="components/jquery.js"></script>
+    <script src="components/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $.getJSON("components/data.json", function(data) {
+                var person_data = '';
+                $.each(data, function(key, value) {
+                    person_data += '<tr>';
+                    person_data += '<td><input type="checkbox" onclick="GetSelected()"></td>';
+                    person_data += '<td>' + value.name + '</td>';
+                    person_data += '<td>' + value.secName + '</td>';
+                    person_data += '<td>' + value.lastName + '</td>';
+                    person_data += '<td>' + value.city + '</td>';
+                    person_data += '<td>' + value.age + '</td>';
+                    person_data += '</tr>';
+                });
+                $('#tableSt').append(person_data);
+            });
+        });
+    </script>
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("tableSt");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 0; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        function addSampleRow(id) {
+
+            var objTable = document.getElementById(id);
+
+            var objRow = objTable.insertRow(objTable.rows.length);
+
+            var objCell1 = objRow.insertCell(0);
+
+            var objInputCheckBox = document.createElement("input");
+            objInputCheckBox.type = "checkbox";
+            objCell1.appendChild(objInputCheckBox);
+
+
+            var objCell2 = objRow.insertCell(1);
+            var new_name = document.getElementById('fname').value;
+            objCell2.innerHTML = new_name;
+
+            var objCell3 = objRow.insertCell(2);
+            var new_sname = document.getElementById('sname').value;
+            objCell3.innerHTML = new_sname;
+
+            var objCell4 = objRow.insertCell(3);
+            var new_lname = document.getElementById('lname').value;
+            objCell4.innerHTML = new_lname;
+
+            var objCell5 = objRow.insertCell(4);
+            var new_city = document.getElementById('city').value;
+            objCell5.innerHTML = new_city;
+
+            var objCell6 = objRow.insertCell(5);
+            var new_age = document.getElementById('age').value;
+            objCell6.innerHTML = new_age;
+        }
+    </script>
+
+    <script>
+        function removeSampleRow(id) {
+            var objTable = document.getElementById(id);
+
+            var iRow = objTable.rows.length;
+
+            var counter = 0;
+
+            if (objTable.rows.length > 1) {
+                for (var i = 0; i < objTable.rows.length; i++) {
+
+                    var chk = objTable.rows[i].cells[0].childNodes[0];
+                    if (chk.checked) {
+                        objTable.deleteRow(i);
+                        iRow--;
+                        i--;
+                        counter = counter + 1;
+                    }
+                }
+                if (counter == 0) {
+                    alert("Select row for delete");
+                }
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tableSt tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+
+</body></html>
